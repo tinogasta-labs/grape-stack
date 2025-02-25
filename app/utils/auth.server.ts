@@ -4,6 +4,10 @@ import { db } from './db.server'
 
 export const AUTH_SESSION_KEY = 'userId'
 
+const SESSION_EXPIRATION_TIME = 1000 * 60 * 60 * 24 * 30 // 30 days
+export const getSessionExpirationDate = () =>
+  new Date(Date.now() + SESSION_EXPIRATION_TIME)
+
 export async function login({
   username,
   password,

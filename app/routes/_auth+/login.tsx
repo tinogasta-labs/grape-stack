@@ -2,7 +2,11 @@ import { getFormProps, getInputProps, useForm } from '@conform-to/react'
 import { parseWithZod } from '@conform-to/zod'
 import { Form, type MetaFunction, data, redirect } from 'react-router'
 import { z } from 'zod'
-import { AUTH_SESSION_KEY, login } from '~/utils/auth.server'
+import {
+  AUTH_SESSION_KEY,
+  getSessionExpirationDate,
+  login,
+} from '~/utils/auth.server'
 import { authSessionStorage } from '~/utils/session.server'
 import type { Route } from './+types/login'
 
@@ -14,6 +18,7 @@ const LoginFormSchema = z.object({
     .refine(val => new TextEncoder().encode(val).length <= 72, {
       message: 'Password is too long',
     }),
+  remember: z.boolean().default(false),
 })
 
 export const meta: MetaFunction = () => [{ title: 'Login | Grape Stack' }]
@@ -44,7 +49,7 @@ export async function action({ request }: Route.ActionArgs) {
     )
   }
 
-  const { user } = submission.value
+  const { user, remember } = submission.value
 
   const authSession = await authSessionStorage.getSession(
     request.headers.get('cookie'),
@@ -52,7 +57,9 @@ export async function action({ request }: Route.ActionArgs) {
   authSession.set(AUTH_SESSION_KEY, user.id)
   return redirect('/', {
     headers: {
-      'set-cookie': await authSessionStorage.commitSession(authSession),
+      'set-cookie': await authSessionStorage.commitSession(authSession, {
+        expires: remember ? getSessionExpirationDate() : undefined,
+      }),
     },
   })
 }
@@ -93,6 +100,10 @@ export default function LoginRoute({ actionData }: Route.ComponentProps) {
               {...getInputProps(fields.password, { type: 'password' })}
             />
             {JSON.stringify(fields.password.errors, null, 2)}
+          </div>
+          <div className="flex items-center gap-1">
+            <input {...getInputProps(fields.remember, { type: 'checkbox' })} />
+            <label htmlFor={fields.remember.id}>Remember me</label>
           </div>
           {JSON.stringify(form.errors, null, 2)}
           <button
