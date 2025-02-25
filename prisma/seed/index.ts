@@ -1,5 +1,5 @@
+import { createPassword } from '@tests/db-utils'
 import { db } from '~/utils/db.server'
-import { createPassword } from './utils'
 
 async function seed() {
   // clean database
