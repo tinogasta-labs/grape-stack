@@ -4,7 +4,7 @@ import type { Route } from './+types'
 
 export function meta() {
   return [
-    { title: 'New React Router App' },
+    { title: 'Grape Stack' },
     { name: 'description', content: 'Welcome to React Router!' },
   ]
 }

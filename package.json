@@ -11,7 +11,9 @@
     "format:write": "prettier . --write",
     "lint": "biome lint .",
     "lint:fix": "biome lint . --fix",
-    "prepare": "lefthook install"
+    "prepare": "lefthook install",
+    "test:e2e": "playwright test",
+    "test:e2e:ui": "playwright test --ui"
   },
   "dependencies": {
     "@conform-to/react": "1.2.2",
@@ -30,6 +32,7 @@
   },
   "devDependencies": {
     "@biomejs/biome": "1.9.4",
+    "@playwright/test": "1.50.1",
     "@react-router/dev": "7.2.0",
     "@react-router/remix-routes-option-adapter": "7.2.0",
     "@tailwindcss/vite": "4.0.8",
