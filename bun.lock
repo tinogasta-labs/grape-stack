@@ -20,6 +20,7 @@
       },
       "devDependencies": {
         "@biomejs/biome": "1.9.4",
+        "@faker-js/faker": "9.5.0",
         "@playwright/test": "1.50.1",
         "@react-router/dev": "7.2.0",
         "@react-router/remix-routes-option-adapter": "7.2.0",
@@ -27,6 +28,7 @@
         "@types/node": "22.13.5",
         "@types/react": "19.0.10",
         "@types/react-dom": "19.0.4",
+        "enforce-unique": "1.3.0",
         "lefthook": "1.11.0",
         "prettier": "3.5.2",
         "prettier-plugin-tailwindcss": "0.6.11",
@@ -175,6 +177,8 @@
     "@esbuild/win32-ia32": ["@esbuild/win32-ia32@0.24.2", "", { "os": "win32", "cpu": "ia32" }, "sha512-q+iGUwfs8tncmFC9pcnD5IvRHAzmbwQ3GPS5/ceCyHdjXubwQWI12MKWSNSMYLJMq23/IUCvJMS76PDqXe1fxA=="],
 
     "@esbuild/win32-x64": ["@esbuild/win32-x64@0.24.2", "", { "os": "win32", "cpu": "x64" }, "sha512-7VTgWzgMGvup6aSqDPLiW5zHaxYJGTO4OokMjIlrCtf+VpEL+cXKtCvg723iguPYI5oaUNdS+/V7OU2gvXVWEg=="],
+
+    "@faker-js/faker": ["@faker-js/faker@9.5.0", "", {}, "sha512-3qbjLv+fzuuCg3umxc9/7YjrEXNaKwHgmig949nfyaTx8eL4FAsvFbu+1JcFUj1YAXofhaDn6JdEUBTYuk0Ssw=="],
 
     "@hono/node-server": ["@hono/node-server@1.13.8", "", { "peerDependencies": { "hono": "^4" } }, "sha512-fsn8ucecsAXUoVxrUil0m13kOEq4mkX4/4QozCqmY+HpGfKl74OYSn8JcMA8GnG0ClfdRI4/ZSeG7zhFaVg+wg=="],
 
@@ -393,6 +397,8 @@
     "encodeurl": ["encodeurl@2.0.0", "", {}, "sha512-Q0n9HRi4m6JuGIV1eFlmvJB7ZEVxu93IrMyiMsGC0lrMJMWzRgx6WGquyfQgZVb31vhGgXnfmPNNXmxnOkRBrg=="],
 
     "end-of-stream": ["end-of-stream@1.4.4", "", { "dependencies": { "once": "^1.4.0" } }, "sha512-+uw1inIHVPQoaVuHzRyXd21icM+cnt4CzD5rW+NC1wjOUSTOs+Te7FOv7AhN7vS9x/oIyhLP5PR1H+phQAHu5Q=="],
+
+    "enforce-unique": ["enforce-unique@1.3.0", "", {}, "sha512-VaNJOwgNeOtZ4qvfGO5OsRWnbvF3jX0/v/3I2YSFpOnPwWj/spbDz1Ktbi5Z9v/eGgcqCqeghW1wkCnSWF4jcg=="],
 
     "enhanced-resolve": ["enhanced-resolve@5.18.1", "", { "dependencies": { "graceful-fs": "^4.2.4", "tapable": "^2.2.0" } }, "sha512-ZSW3ma5GkcQBIpwZTSRAI8N71Uuwgs93IezB7mf7R60tC8ZbJideoDNKjHn2O9KIlx6rkGTTEk1xUCK2E1Y2Yg=="],
 
