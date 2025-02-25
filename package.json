@@ -14,8 +14,11 @@
     "prepare": "lefthook install"
   },
   "dependencies": {
+    "@epic-web/remember": "1.1.0",
+    "@prisma/client": "6.4.1",
     "@react-router/node": "7.2.0",
     "@react-router/serve": "7.2.0",
+    "bcryptjs": "3.0.2",
     "isbot": "5.1.23",
     "react": "19.0.0",
     "react-dom": "19.0.0",
@@ -34,11 +37,15 @@
     "lefthook": "1.11.0",
     "prettier": "3.5.2",
     "prettier-plugin-tailwindcss": "0.6.11",
+    "prisma": "6.4.1",
     "remix-flat-routes": "0.8.5",
     "tailwindcss": "4.0.8",
     "typescript": "5.7.3",
     "vite": "6.1.1",
     "vite-tsconfig-paths": "5.1.4"
   },
-  "packageManager": "bun@1.2.3"
+  "packageManager": "bun@1.2.3",
+  "prisma": {
+    "seed": "bun prisma/seed"
+  }
 }

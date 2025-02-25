@@ -1,0 +1,27 @@
+import { db } from '~/utils/db.server'
+import { createPassword } from './utils'
+
+async function seed() {
+  // clean database
+  await db.user.deleteMany({})
+
+  // insert fake user
+  await db.user.create({
+    data: {
+      email: 'demouser@email.com',
+      username: 'demouser',
+      password: {
+        create: await createPassword('demopassword'),
+      },
+    },
+  })
+}
+
+seed()
+  .catch(e => {
+    // biome-ignore lint/suspicious/noConsole: log seed error
+    console.log(e)
+  })
+  .finally(async () => {
+    await db.$disconnect()
+  })

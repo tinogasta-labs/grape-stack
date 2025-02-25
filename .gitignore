@@ -8,3 +8,11 @@
 # Lock files
 pnpm-lock.yaml
 package-lock.json
+
+# Env
+.env
+
+# Prisma
+prisma/*.db
+prisma/*.sqlite
+prisma/*.db-journal
