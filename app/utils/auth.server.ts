@@ -20,6 +20,17 @@ export async function login({
   return verifyUserPassword({ username }, password)
 }
 
+export async function logout(request: Request) {
+  const authSession = await authSessionStorage.getSession(
+    request.headers.get('cookie'),
+  )
+  throw redirect('/', {
+    headers: {
+      'set-cookie': await authSessionStorage.destroySession(authSession),
+    },
+  })
+}
+
 async function verifyUserPassword(
   where: Pick<User, 'username'> | Pick<User, 'id'>,
   passwrod: string,
