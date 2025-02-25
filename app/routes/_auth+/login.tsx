@@ -2,7 +2,8 @@ import { getFormProps, getInputProps, useForm } from '@conform-to/react'
 import { parseWithZod } from '@conform-to/zod'
 import { Form, type MetaFunction, data, redirect } from 'react-router'
 import { z } from 'zod'
-import { login } from '~/utils/auth.server'
+import { AUTH_SESSION_KEY, login } from '~/utils/auth.server'
+import { authSessionStorage } from '~/utils/session.server'
 import type { Route } from './+types/login'
 
 const LoginFormSchema = z.object({
@@ -43,7 +44,17 @@ export async function action({ request }: Route.ActionArgs) {
     )
   }
 
-  return redirect('/')
+  const { user } = submission.value
+
+  const authSession = await authSessionStorage.getSession(
+    request.headers.get('cookie'),
+  )
+  authSession.set(AUTH_SESSION_KEY, user.id)
+  return redirect('/', {
+    headers: {
+      'set-cookie': await authSessionStorage.commitSession(authSession),
+    },
+  })
 }
 
 export default function LoginRoute({ actionData }: Route.ComponentProps) {
