@@ -2,8 +2,12 @@ import { isbot } from 'isbot'
 import type { RenderToPipeableStreamOptions } from 'react-dom/server'
 import type { AppLoadContext, EntryContext } from 'react-router'
 import { ServerRouter } from 'react-router'
+import { getPublicEnv, initEnv } from './utils/env.server'
 
 export const streamTimeout = 5_000
+
+initEnv()
+global.ENV = getPublicEnv()
 
 export default async function handleRequest(
   request: Request,
