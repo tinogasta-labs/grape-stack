@@ -19,6 +19,7 @@
         "@types/node": "20.17.19",
         "@types/react": "19.0.10",
         "@types/react-dom": "19.0.4",
+        "lefthook": "1.11.0",
         "prettier": "3.5.2",
         "prettier-plugin-tailwindcss": "0.6.11",
         "remix-flat-routes": "0.8.5",
@@ -447,6 +448,28 @@
     "json5": ["json5@2.2.3", "", { "bin": { "json5": "lib/cli.js" } }, "sha512-XmOWe7eyHYH14cLdVPoyg+GOH3rYX++KpzrylJwSW98t3Nk+U8XOl8FWKOgwtzdb8lXGf6zYwDUzeHMWfxasyg=="],
 
     "jsonfile": ["jsonfile@6.1.0", "", { "dependencies": { "universalify": "^2.0.0" }, "optionalDependencies": { "graceful-fs": "^4.1.6" } }, "sha512-5dgndWOriYSm5cnYaJNhalLNDKOqFwyDB/rr1E9ZsGciGvKPs8R2xYGCacuf3z6K1YKDz182fd+fY3cn3pMqXQ=="],
+
+    "lefthook": ["lefthook@1.11.0", "", { "optionalDependencies": { "lefthook-darwin-arm64": "1.11.0", "lefthook-darwin-x64": "1.11.0", "lefthook-freebsd-arm64": "1.11.0", "lefthook-freebsd-x64": "1.11.0", "lefthook-linux-arm64": "1.11.0", "lefthook-linux-x64": "1.11.0", "lefthook-openbsd-arm64": "1.11.0", "lefthook-openbsd-x64": "1.11.0", "lefthook-windows-arm64": "1.11.0", "lefthook-windows-x64": "1.11.0" }, "bin": { "lefthook": "bin/index.js" } }, "sha512-FSNRtrcFIe0FUxqEs/0ZYyY7yUvAXLrY8Fic1CRagcSpcC7MByjAV2utkTaslGo4+GPLaZnZL4JD1lNdN/8r2A=="],
+
+    "lefthook-darwin-arm64": ["lefthook-darwin-arm64@1.11.0", "", { "os": "darwin", "cpu": "arm64" }, "sha512-1Man6kmkFIB6Kn0vjrnPaBvIena3cZp/BjN58mCV3ErS5OjYDWtuUe2bl+y1uYDoNzOjiQQvdGWplroYD7Lslw=="],
+
+    "lefthook-darwin-x64": ["lefthook-darwin-x64@1.11.0", "", { "os": "darwin", "cpu": "x64" }, "sha512-rQ7JJlLjaJNEk/mw7hp2/yGSdsmD2ZcQoH3slSQKfNaMjpZX3HXyBjZODUWtWqx7XqHqgU/SURMNmh/neBirdA=="],
+
+    "lefthook-freebsd-arm64": ["lefthook-freebsd-arm64@1.11.0", "", { "os": "freebsd", "cpu": "arm64" }, "sha512-4FzuYhwtVdekslo6sa3p8ZR2q2qsFtwaNPCUXoisre1aKdL0k8QNQlk0fCZ20/WK7lu+N21CUOKP3LI8iY1dHQ=="],
+
+    "lefthook-freebsd-x64": ["lefthook-freebsd-x64@1.11.0", "", { "os": "freebsd", "cpu": "x64" }, "sha512-26bOviVrePVJ9pOTFsJgRaS1ZigbTPj3OZFbMlLT+0Cu54uFKZWe5BNg1AZ2y4ioNrg16pilWZYNyc5wL0DlIg=="],
+
+    "lefthook-linux-arm64": ["lefthook-linux-arm64@1.11.0", "", { "os": "linux", "cpu": "arm64" }, "sha512-iNfa92n4M9EGMKGC8j3l6nlAjX8o7KnuHMA1pWudiSnPwfJwJozNcZH/jhe+A0eqYLkvZ18OlAmJfXFrVBQ0Lg=="],
+
+    "lefthook-linux-x64": ["lefthook-linux-x64@1.11.0", "", { "os": "linux", "cpu": "x64" }, "sha512-2NtenHWnPbv27CufQwxVj6HaHqvZmP4qfFwgt+yMmghLml9WLmY3fHjw+CDhAKvlKsBv1mPuE+sGVEhnz7R0zA=="],
+
+    "lefthook-openbsd-arm64": ["lefthook-openbsd-arm64@1.11.0", "", { "os": "openbsd", "cpu": "arm64" }, "sha512-j4kxeWUWDcofJHZs4yF0JnoRRuE92xekxh2i22mdufVmCBNOSiWGOT78hT5UwfQucjVjKY3oCtGH29ItiY0J1g=="],
+
+    "lefthook-openbsd-x64": ["lefthook-openbsd-x64@1.11.0", "", { "os": "openbsd", "cpu": "x64" }, "sha512-QaTbLaDpdSjHLsNronxYqrEVEMV2+wRnF8kvffAiWIoMl1Z15acxHNrGtXNywZ4OhsKifqt6w+CLQyoZfm7u7g=="],
+
+    "lefthook-windows-arm64": ["lefthook-windows-arm64@1.11.0", "", { "os": "win32", "cpu": "arm64" }, "sha512-dxtQ+JCOaHJBuC+I4y0ati0cT62vui2WUlhc4AS/UPv3kp/UZC8ahdnYPAlg3xVLmAgb0nBOyHm7pYVq3A62MQ=="],
+
+    "lefthook-windows-x64": ["lefthook-windows-x64@1.11.0", "", { "os": "win32", "cpu": "x64" }, "sha512-7ca/WQS3TYBwL2puzTFHM8wj6zZGuRlZKYkzLQncJ3+9UjVL+kcT9PuL4kOMs7sXyCsAYsdhNuko70w/28nTRA=="],
 
     "lightningcss": ["lightningcss@1.29.1", "", { "dependencies": { "detect-libc": "^1.0.3" }, "optionalDependencies": { "lightningcss-darwin-arm64": "1.29.1", "lightningcss-darwin-x64": "1.29.1", "lightningcss-freebsd-x64": "1.29.1", "lightningcss-linux-arm-gnueabihf": "1.29.1", "lightningcss-linux-arm64-gnu": "1.29.1", "lightningcss-linux-arm64-musl": "1.29.1", "lightningcss-linux-x64-gnu": "1.29.1", "lightningcss-linux-x64-musl": "1.29.1", "lightningcss-win32-arm64-msvc": "1.29.1", "lightningcss-win32-x64-msvc": "1.29.1" } }, "sha512-FmGoeD4S05ewj+AkhTY+D+myDvXI6eL27FjHIjoyUkO/uw7WZD1fBVs0QxeYWa7E17CUHJaYX/RUGISCtcrG4Q=="],
 

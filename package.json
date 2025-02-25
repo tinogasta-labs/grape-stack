@@ -10,7 +10,8 @@
     "format": "prettier . --list-different",
     "format:write": "prettier . --write",
     "lint": "biome lint .",
-    "lint:fix": "biome lint . --fix"
+    "lint:fix": "biome lint . --fix",
+    "prepare": "lefthook install"
   },
   "dependencies": {
     "@react-router/node": "7.2.0",
@@ -28,6 +29,7 @@
     "@types/node": "20.17.19",
     "@types/react": "19.0.10",
     "@types/react-dom": "19.0.4",
+    "lefthook": "1.11.0",
     "prettier": "3.5.2",
     "prettier-plugin-tailwindcss": "0.6.11",
     "remix-flat-routes": "0.8.5",
