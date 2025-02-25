@@ -6,6 +6,7 @@ import {
   AUTH_SESSION_KEY,
   getSessionExpirationDate,
   login,
+  requireAnonymous,
 } from '~/utils/auth.server'
 import { authSessionStorage } from '~/utils/session.server'
 import type { Route } from './+types/login'
@@ -62,6 +63,11 @@ export async function action({ request }: Route.ActionArgs) {
       }),
     },
   })
+}
+
+export async function loader({ request }: Route.LoaderArgs) {
+  await requireAnonymous(request)
+  return {}
 }
 
 export default function LoginRoute({ actionData }: Route.ComponentProps) {
