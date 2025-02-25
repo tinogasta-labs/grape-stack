@@ -1,0 +1,10 @@
+{
+  "recommendations": [
+    "bradlc.vscode-tailwindcss",
+    "redhat.vscode-yaml",
+    "esbenp.prettier-vscode",
+    "biomejs.biome",
+    "Prisma.prisma"
+  ],
+  "unwantedRecommendations": []
+}
