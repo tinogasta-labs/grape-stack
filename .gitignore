@@ -16,3 +16,8 @@ package-lock.json
 prisma/*.db
 prisma/*.sqlite
 prisma/*.db-journal
+
+# Tests
+/coverage
+/test-results
+/playwright-report
