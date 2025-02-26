@@ -1,7 +1,15 @@
 import { getFormProps, getInputProps, useForm } from '@conform-to/react'
 import { parseWithZod } from '@conform-to/zod'
-import { Form, type MetaFunction, data, redirect } from 'react-router'
+import {
+  Form,
+  Link,
+  type MetaFunction,
+  data,
+  href,
+  redirect,
+} from 'react-router'
 import { z } from 'zod'
+import { GeneralErrorBoundary } from '~/components/error-boundary'
 import {
   AUTH_SESSION_KEY,
   getSessionExpirationDate,
@@ -119,7 +127,19 @@ export default function LoginRoute({ actionData }: Route.ComponentProps) {
             Login
           </button>
         </Form>
+        <div className="py-4 text-sm">
+          <p>
+            Don't have an account?{' '}
+            <Link className="underline" to={href('/signup')}>
+              Sign up
+            </Link>
+          </p>
+        </div>
       </div>
     </div>
   )
+}
+
+export function ErrorBoundary() {
+  return <GeneralErrorBoundary />
 }
