@@ -6,6 +6,7 @@
       "dependencies": {
         "@conform-to/react": "1.2.2",
         "@conform-to/zod": "1.2.2",
+        "@epic-web/invariant": "1.0.0",
         "@epic-web/remember": "1.1.0",
         "@epic-web/totp": "4.0.1",
         "@prisma/client": "6.4.1",
@@ -126,6 +127,8 @@
     "@conform-to/zod": ["@conform-to/zod@1.2.2", "", { "dependencies": { "@conform-to/dom": "1.2.2" }, "peerDependencies": { "zod": "^3.21.0" } }, "sha512-mNCzh0XsF2vhCtD8bfHYMYayEJ9dP6/KsGjmq8DFcO1ykDTNQZwfi1MIm4evGYVempSS3poYr4xZjd7cXEbtaw=="],
 
     "@drizzle-team/brocli": ["@drizzle-team/brocli@0.11.0", "", {}, "sha512-hD3pekGiPg0WPCCGAZmusBBJsDqGUR66Y452YgQsZOnkdQ7ViEPKuyP4huUGEZQefp8g34RRodXYmJ2TbCH+tg=="],
+
+    "@epic-web/invariant": ["@epic-web/invariant@1.0.0", "", {}, "sha512-lrTPqgvfFQtR/eY/qkIzp98OGdNJu0m5ji3q/nJI8v3SXkRKEnWiOxMmbvcSoAIzv/cGiuvRy57k4suKQSAdwA=="],
 
     "@epic-web/remember": ["@epic-web/remember@1.1.0", "", {}, "sha512-FIhO7PFUVEbcnrJOtom8gb4GXog4Z44n4Jxwmw2nkKt4mx8I/q/d0O4tMabjYndM1QX2oXvRYzpZxtP61s2P5A=="],
 

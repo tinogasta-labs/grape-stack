@@ -18,6 +18,11 @@ import { UserEmailSchema } from '~/utils/validation'
 import { verifySessionStorage } from '~/utils/verify.server'
 import type { Route } from './+types/signup'
 import { ONBOARDING_EMAIL_SESSION_KEY } from './onboarding'
+import {
+  CODE_QUERY_PARAM,
+  TARGET_QUERY_PARAM,
+  TYPE_QUERY_PARAM,
+} from './verify'
 
 const SignupFormSchema = z.object({
   email: UserEmailSchema,
@@ -43,10 +48,10 @@ export async function action({ request }: Route.ActionArgs) {
 
   const redirectToUrl = new URL(`${getDomainUrl(request)}/verify`)
   const type = 'onboarding'
-  redirectToUrl.searchParams.set('type', type)
-  redirectToUrl.searchParams.set('target', email)
+  redirectToUrl.searchParams.set(TYPE_QUERY_PARAM, type)
+  redirectToUrl.searchParams.set(TARGET_QUERY_PARAM, email)
   const verifyUrl = new URL(redirectToUrl)
-  verifyUrl.searchParams.set('code', otp)
+  verifyUrl.searchParams.set(CODE_QUERY_PARAM, otp)
 
   const verificationData = {
     type,
