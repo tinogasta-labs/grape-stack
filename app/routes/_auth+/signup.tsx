@@ -30,7 +30,23 @@ const SignupFormSchema = z.object({
 
 export async function action({ request }: Route.ActionArgs) {
   const formData = await request.formData()
-  const submission = parseWithZod(formData, { schema: SignupFormSchema })
+  const submission = await parseWithZod(formData, {
+    schema: SignupFormSchema.superRefine(async (data, ctx) => {
+      const existUser = await db.user.findUnique({
+        where: { email: data.email },
+        select: { id: true },
+      })
+      if (existUser) {
+        ctx.addIssue({
+          path: ['email'],
+          code: 'custom',
+          message: 'Email is already taken',
+        })
+        return
+      }
+    }),
+    async: true,
+  })
 
   if (submission.status !== 'success') {
     return data(

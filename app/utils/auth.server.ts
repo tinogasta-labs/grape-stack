@@ -85,3 +85,32 @@ export async function requireAnonymous(request: Request) {
     throw redirect('/')
   }
 }
+
+export async function signup({
+  email,
+  username,
+  password,
+}: {
+  email: User['email']
+  username: User['username']
+  password: string
+}) {
+  const hashedPassword = await getPasswordHash(password)
+  const user = await db.user.create({
+    select: { id: true },
+    data: {
+      email: email.toLowerCase(),
+      username: username.toLowerCase(),
+      password: {
+        create: {
+          hash: hashedPassword,
+        },
+      },
+    },
+  })
+  return user
+}
+
+async function getPasswordHash(password: string) {
+  return bcrypt.hash(password, 10)
+}
