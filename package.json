@@ -19,6 +19,7 @@
     "@conform-to/react": "1.2.2",
     "@conform-to/zod": "1.2.2",
     "@epic-web/remember": "1.1.0",
+    "@epic-web/totp": "4.0.1",
     "@prisma/client": "6.4.1",
     "@react-router/node": "7.2.0",
     "@react-router/serve": "7.2.0",

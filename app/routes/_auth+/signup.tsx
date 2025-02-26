@@ -1,5 +1,6 @@
 import { getFormProps, getInputProps, useForm } from '@conform-to/react'
 import { parseWithZod } from '@conform-to/zod'
+import { generateTOTP } from '@epic-web/totp'
 import {
   Form,
   Link,
@@ -11,8 +12,12 @@ import {
 import { z } from 'zod'
 import { GeneralErrorBoundary } from '~/components/error-boundary'
 import { requireAnonymous } from '~/utils/auth.server'
+import { db } from '~/utils/db.server'
+import { getDomainUrl } from '~/utils/misc'
 import { UserEmailSchema } from '~/utils/validation'
+import { verifySessionStorage } from '~/utils/verify.server'
 import type { Route } from './+types/signup'
+import { ONBOARDING_EMAIL_SESSION_KEY } from './onboarding'
 
 const SignupFormSchema = z.object({
   email: UserEmailSchema,
@@ -29,9 +34,43 @@ export async function action({ request }: Route.ActionArgs) {
     )
   }
 
-  // TODO send code verification
+  const { email } = submission.value
 
-  return redirect('/verify')
+  const { otp, ...verificationConfig } = await generateTOTP({
+    algorithm: 'SHA-256',
+    period: 10 * 60,
+  })
+
+  const redirectToUrl = new URL(`${getDomainUrl(request)}/verify`)
+  const type = 'onboarding'
+  redirectToUrl.searchParams.set('type', type)
+  redirectToUrl.searchParams.set('target', email)
+  const verifyUrl = new URL(redirectToUrl)
+  verifyUrl.searchParams.set('code', otp)
+
+  const verificationData = {
+    type,
+    target: email,
+    ...verificationConfig,
+    expiresAt: new Date(Date.now() + verificationConfig.period * 1000),
+  }
+
+  // biome-ignore lint/suspicious/noConsole: Log verify url
+  console.log('YOUR VERIFY URL: ', verifyUrl)
+
+  await db.verification.upsert({
+    where: { target_type: { type, target: email } },
+    create: verificationData,
+    update: verificationData,
+  })
+
+  // TODO: send email with verify url/code
+
+  const verifySession = await verifySessionStorage.getSession(
+    request.headers.get('cookie'),
+  )
+  verifySession.set(ONBOARDING_EMAIL_SESSION_KEY, email)
+  return redirect(redirectToUrl.toString())
 }
 
 export async function loader({ request }: Route.LoaderArgs) {

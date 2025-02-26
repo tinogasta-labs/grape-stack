@@ -47,7 +47,7 @@ export default function VerfifyRoute({ actionData }: Route.ComponentProps) {
           <div className="flex flex-col gap-2">
             <input
               className="w-full rounded-lg border px-2 py-3"
-              placeholder="Enter your email"
+              placeholder="Enter your code"
               maxLength={6}
               {...getInputProps(fields.code, { type: 'text' })}
             />

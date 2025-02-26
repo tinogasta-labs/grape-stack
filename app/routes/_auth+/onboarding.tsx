@@ -9,6 +9,8 @@ import {
 } from '~/utils/validation'
 import type { Route } from './+types/onboarding'
 
+export const ONBOARDING_EMAIL_SESSION_KEY = 'email'
+
 const OnboardingFormSchema = z
   .object({
     username: UsernameSchema,
