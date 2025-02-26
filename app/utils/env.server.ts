@@ -1,8 +1,9 @@
 import { z } from 'zod'
+import { NonEmptyString } from './validation'
 
 const envSchema = z.object({
   NODE_ENV: z.enum(['production', 'development', 'test'] as const),
-  SESSION_SECRET: z.string(),
+  SESSION_SECRET: NonEmptyString,
 })
 
 declare global {
