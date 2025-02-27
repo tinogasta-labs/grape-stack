@@ -115,9 +115,16 @@ export default function LoginRoute({ actionData }: Route.ComponentProps) {
             />
             {JSON.stringify(fields.password.errors, null, 2)}
           </div>
-          <div className="flex items-center gap-1">
-            <input {...getInputProps(fields.remember, { type: 'checkbox' })} />
-            <label htmlFor={fields.remember.id}>Remember me</label>
+          <div className="flex items-center justify-between">
+            <div className="flex items-center gap-1">
+              <input
+                {...getInputProps(fields.remember, { type: 'checkbox' })}
+              />
+              <label htmlFor={fields.remember.id}>Remember me</label>
+            </div>
+            <Link className="underline" to={href('/forgot-password')}>
+              Forgot password
+            </Link>
           </div>
           {JSON.stringify(form.errors, null, 2)}
           <button
