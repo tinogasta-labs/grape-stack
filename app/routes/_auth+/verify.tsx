@@ -1,17 +1,16 @@
 import { getFormProps, getInputProps, useForm } from '@conform-to/react'
 import { parseWithZod } from '@conform-to/zod'
-import { Form, type MetaFunction, data, useSearchParams } from 'react-router'
+import { Form, type MetaFunction, useSearchParams } from 'react-router'
 import { z } from 'zod'
 import { GeneralErrorBoundary } from '~/components/error-boundary'
-import { db } from '~/utils/db.server'
 import { VerifyCodeSchema } from '~/utils/validation'
 import type { Route } from './+types/verify'
-import { handleVerification } from './onboarding.server'
-import { isCodeValid } from './verify.server'
+import { validateRequest } from './verify.server'
 
 export const CODE_QUERY_PARAM = 'code'
 export const TARGET_QUERY_PARAM = 'target'
 export const TYPE_QUERY_PARAM = 'type'
+export const REDIRECT_TO_QUERY_PARAM = 'redirectTo'
 
 const types = ['onboarding'] as const
 const VerificationTypeSchema = z.enum(types)
@@ -25,43 +24,7 @@ export const VerifyFormSchema = z.object({
 
 export async function action({ request }: Route.ActionArgs) {
   const formData = await request.formData()
-  const submission = await parseWithZod(formData, {
-    schema: VerifyFormSchema.superRefine(async (data, ctx) => {
-      const codeIsValid = await isCodeValid({
-        code: data[CODE_QUERY_PARAM],
-        type: data[TYPE_QUERY_PARAM],
-        target: data[TARGET_QUERY_PARAM],
-      })
-      if (!codeIsValid) {
-        ctx.addIssue({
-          path: ['code'],
-          code: 'custom',
-          message: 'Invalid code',
-        })
-        return
-      }
-    }),
-    async: true,
-  })
-  if (submission.status !== 'success') {
-    return data(
-      { result: submission.reply() },
-      { status: submission.status === 'error' ? 400 : 200 },
-    )
-  }
-
-  const { value: submissionValue } = submission
-
-  await db.verification.delete({
-    where: {
-      target_type: {
-        type: submissionValue[TYPE_QUERY_PARAM],
-        target: submissionValue[TARGET_QUERY_PARAM],
-      },
-    },
-  })
-
-  return handleVerification({ request, body: formData, submission })
+  return validateRequest(request, formData)
 }
 
 export const meta: MetaFunction = () => [{ title: 'Verify | Grape Stack' }]
