@@ -5,7 +5,8 @@ import { data } from 'react-router'
 import type { z } from 'zod'
 import { db } from '~/utils/db.server'
 import { getDomainUrl } from '~/utils/misc'
-import { handleVerification } from './onboarding.server'
+import { handleVerification as handleOnboardingVerification } from './onboarding.server'
+import { handleVerification as handleResetPasswordVerification } from './reset-password.server'
 import {
   CODE_QUERY_PARAM,
   REDIRECT_TO_QUERY_PARAM,
@@ -153,7 +154,11 @@ export async function validateRequest(
   switch (submissionValue[TYPE_QUERY_PARAM]) {
     case 'onboarding': {
       await deleteVerification()
-      return handleVerification({ request, body, submission })
+      return handleOnboardingVerification({ request, body, submission })
+    }
+    case 'reset-password': {
+      await deleteVerification()
+      return handleResetPasswordVerification({ request, body, submission })
     }
   }
 }

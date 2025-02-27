@@ -2,6 +2,8 @@ import { Form, type MetaFunction } from 'react-router'
 import { requireAnonymous } from '~/utils/auth.server'
 import type { Route } from './+types/reset-password'
 
+export const RESET_PASSWOD_EMAIL_SESSION_KEY = 'resetPasswordEmail'
+
 export async function action() {
   throw new Response('Not implemented yet', { status: 501 })
 }

@@ -12,7 +12,7 @@ export const TARGET_QUERY_PARAM = 'target'
 export const TYPE_QUERY_PARAM = 'type'
 export const REDIRECT_TO_QUERY_PARAM = 'redirectTo'
 
-const types = ['onboarding'] as const
+const types = ['onboarding', 'reset-password'] as const
 const VerificationTypeSchema = z.enum(types)
 export type VerificationTypes = z.infer<typeof VerificationTypeSchema>
 
