@@ -22,3 +22,6 @@ prisma/*.db-journal
 /coverage
 /test-results
 /playwright-report
+
+# Mocks
+/tests/fixtures/email
