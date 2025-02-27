@@ -4,6 +4,7 @@ import { db } from '~/utils/db.server'
 async function seed() {
   // clean database
   await db.user.deleteMany({})
+  await db.verification.deleteMany({})
 
   // insert fake user
   await db.user.create({
