@@ -9,7 +9,7 @@ export default defineConfig({
     port: Number(process.env.PORT || 3000),
   },
   plugins: [
-    reactRouterHonoServer({ serverEntryPoint: './server', runtime: 'bun' }),
+    reactRouterHonoServer({ serverEntryPoint: './server' }),
     tailwindcss(),
     reactRouter(),
     tsconfigPaths(),
