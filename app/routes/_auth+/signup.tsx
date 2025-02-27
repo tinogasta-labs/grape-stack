@@ -11,8 +11,10 @@ import {
 } from 'react-router'
 import { z } from 'zod'
 import { GeneralErrorBoundary } from '~/components/error-boundary'
+import { SignupEmail } from '~/components/templates/signup-email'
 import { requireAnonymous } from '~/utils/auth.server'
 import { db } from '~/utils/db.server'
+import { sendEmail } from '~/utils/email.server'
 import { getDomainUrl } from '~/utils/misc'
 import { UserEmailSchema } from '~/utils/validation'
 import { verifySessionStorage } from '~/utils/verify.server'
@@ -76,9 +78,6 @@ export async function action({ request }: Route.ActionArgs) {
     expiresAt: new Date(Date.now() + verificationConfig.period * 1000),
   }
 
-  // biome-ignore lint/suspicious/noConsole: Log verify url
-  console.log('YOUR VERIFY URL: ', verifyUrl)
-
   await db.verification.upsert({
     where: { target_type: { type, target: email } },
     create: verificationData,
@@ -91,7 +90,23 @@ export async function action({ request }: Route.ActionArgs) {
     request.headers.get('cookie'),
   )
   verifySession.set(ONBOARDING_EMAIL_SESSION_KEY, email)
-  return redirect(redirectToUrl.toString())
+
+  const response = await sendEmail({
+    to: email,
+    subject: 'Welcome to Grape Stack!',
+    react: <SignupEmail onboardingUrl={verifyUrl.toString()} otp={otp} />,
+  })
+
+  if (response.status === 'success') {
+    return redirect(redirectToUrl.toString())
+  }
+
+  return data(
+    {
+      result: submission.reply({ formErrors: [response.error.message] }),
+    },
+    { status: 500 },
+  )
 }
 
 export async function loader({ request }: Route.LoaderArgs) {
