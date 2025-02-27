@@ -6,7 +6,8 @@
 /build/
 
 # Lock files
-pnpm-lock.yaml
+# pnpm-lock.yaml
+bun.lock
 package-lock.json
 
 # Env
