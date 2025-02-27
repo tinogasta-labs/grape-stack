@@ -114,3 +114,23 @@ export async function signup({
 async function getPasswordHash(password: string) {
   return bcrypt.hash(password, 10)
 }
+
+export async function resetUserPassword({
+  username,
+  password,
+}: {
+  username: User['username']
+  password: string
+}) {
+  const hashedPassword = await getPasswordHash(password)
+  return db.user.update({
+    where: { username },
+    data: {
+      password: {
+        update: {
+          hash: hashedPassword,
+        },
+      },
+    },
+  })
+}

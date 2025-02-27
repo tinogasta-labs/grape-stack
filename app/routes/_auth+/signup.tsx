@@ -1,6 +1,5 @@
 import { getFormProps, getInputProps, useForm } from '@conform-to/react'
 import { parseWithZod } from '@conform-to/zod'
-import { generateTOTP } from '@epic-web/totp'
 import {
   Form,
   Link,
@@ -15,16 +14,9 @@ import { SignupEmail } from '~/components/templates/signup-email'
 import { requireAnonymous } from '~/utils/auth.server'
 import { db } from '~/utils/db.server'
 import { sendEmail } from '~/utils/email.server'
-import { getDomainUrl } from '~/utils/misc'
 import { UserEmailSchema } from '~/utils/validation'
-import { verifySessionStorage } from '~/utils/verify.server'
 import type { Route } from './+types/signup'
-import { ONBOARDING_EMAIL_SESSION_KEY } from './onboarding'
-import {
-  CODE_QUERY_PARAM,
-  TARGET_QUERY_PARAM,
-  TYPE_QUERY_PARAM,
-} from './verify'
+import { prepareVerification } from './verify.server'
 
 const SignupFormSchema = z.object({
   email: UserEmailSchema,
@@ -59,37 +51,12 @@ export async function action({ request }: Route.ActionArgs) {
 
   const { email } = submission.value
 
-  const { otp, ...verificationConfig } = await generateTOTP({
-    algorithm: 'SHA-256',
+  const { verifyUrl, otp, redirectTo } = await prepareVerification({
     period: 10 * 60,
-  })
-
-  const redirectToUrl = new URL(`${getDomainUrl(request)}/verify`)
-  const type = 'onboarding'
-  redirectToUrl.searchParams.set(TYPE_QUERY_PARAM, type)
-  redirectToUrl.searchParams.set(TARGET_QUERY_PARAM, email)
-  const verifyUrl = new URL(redirectToUrl)
-  verifyUrl.searchParams.set(CODE_QUERY_PARAM, otp)
-
-  const verificationData = {
-    type,
+    request,
+    type: 'onboarding',
     target: email,
-    ...verificationConfig,
-    expiresAt: new Date(Date.now() + verificationConfig.period * 1000),
-  }
-
-  await db.verification.upsert({
-    where: { target_type: { type, target: email } },
-    create: verificationData,
-    update: verificationData,
   })
-
-  // TODO: send email with verify url/code
-
-  const verifySession = await verifySessionStorage.getSession(
-    request.headers.get('cookie'),
-  )
-  verifySession.set(ONBOARDING_EMAIL_SESSION_KEY, email)
 
   const response = await sendEmail({
     to: email,
@@ -98,7 +65,7 @@ export async function action({ request }: Route.ActionArgs) {
   })
 
   if (response.status === 'success') {
-    return redirect(redirectToUrl.toString())
+    return redirect(redirectTo.toString())
   }
 
   return data(
