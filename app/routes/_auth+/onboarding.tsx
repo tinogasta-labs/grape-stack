@@ -3,11 +3,7 @@ import { parseWithZod } from '@conform-to/zod'
 import { Form, data, redirect } from 'react-router'
 import { z } from 'zod'
 import { GeneralErrorBoundary } from '~/components/error-boundary'
-import {
-  AUTH_SESSION_KEY,
-  getSessionExpirationDate,
-  signup,
-} from '~/utils/auth.server'
+import { AUTH_SESSION_KEY, signup } from '~/utils/auth.server'
 import { db } from '~/utils/db.server'
 import { authSessionStorage } from '~/utils/session.server'
 import {
@@ -50,32 +46,32 @@ export async function action({ request }: Route.ActionArgs) {
           return
         }
       }).transform(async data => {
-        if (intent !== null) return { ...data, user: null }
-        const user = await signup({ ...data, email })
-        return { ...data, user }
+        if (intent !== null) return { ...data, session: null }
+        const session = await signup({ ...data, email })
+        return { ...data, session }
       }),
     async: true,
   })
 
-  if (submission.status !== 'success' || !submission.value.user) {
+  if (submission.status !== 'success' || !submission.value.session) {
     return data(
       { result: submission.reply() },
       { status: submission.status === 'error' ? 400 : 200 },
     )
   }
 
-  const { user, remember } = submission.value
+  const { session, remember } = submission.value
 
   const authSession = await authSessionStorage.getSession(
     request.headers.get('cookie'),
   )
-  authSession.set(AUTH_SESSION_KEY, user.id)
+  authSession.set(AUTH_SESSION_KEY, session.id)
   const verifySession = await verifySessionStorage.getSession()
   const headers = new Headers()
   headers.append(
     'set-cookie',
     await authSessionStorage.commitSession(authSession, {
-      expires: remember ? getSessionExpirationDate() : undefined,
+      expires: remember ? session.expirationDate : undefined,
     }),
   )
   headers.append(

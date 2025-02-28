@@ -4,7 +4,7 @@ import { redirect } from 'react-router'
 import { db } from './db.server'
 import { authSessionStorage } from './session.server'
 
-export const AUTH_SESSION_KEY = 'userId'
+export const AUTH_SESSION_KEY = 'sessionId'
 
 const SESSION_EXPIRATION_TIME = 1000 * 60 * 60 * 24 * 30 // 30 days
 export const getSessionExpirationDate = () =>
@@ -17,13 +17,28 @@ export async function login({
   username: User['username']
   password: string
 }) {
-  return verifyUserPassword({ username }, password)
+  const user = await verifyUserPassword({ username }, password)
+  if (!user) return null
+  const session = await db.session.create({
+    select: { id: true, expirationDate: true },
+    data: {
+      userId: user.id,
+      expirationDate: getSessionExpirationDate(),
+    },
+  })
+  return session
 }
 
 export async function logout(request: Request) {
   const authSession = await authSessionStorage.getSession(
     request.headers.get('cookie'),
   )
+  const sessionId = authSession.get(AUTH_SESSION_KEY)
+  if (sessionId) {
+    void (await db.session
+      .deleteMany({ where: { id: sessionId } })
+      .catch(() => {}))
+  }
   throw redirect('/', {
     headers: {
       'set-cookie': await authSessionStorage.destroySession(authSession),
@@ -54,21 +69,21 @@ export async function getUserId(request: Request) {
   const authSession = await authSessionStorage.getSession(
     request.headers.get('cookie'),
   )
-  const userId = authSession.get(AUTH_SESSION_KEY)
-  if (!userId) return null
-  // verify user
-  const user = await db.user.findUnique({
-    where: { id: userId },
-    select: { id: true },
+  const sessionId = authSession.get(AUTH_SESSION_KEY)
+  if (!sessionId) return null
+  // verify session
+  const session = await db.session.findUnique({
+    where: { id: sessionId },
+    select: { userId: true },
   })
-  if (!user) {
+  if (!session) {
     throw redirect('/', {
       headers: {
         'set-cookie': await authSessionStorage.destroySession(authSession),
       },
     })
   }
-  return user.id
+  return session.userId
 }
 
 export async function requireUserId(
@@ -108,19 +123,24 @@ export async function signup({
   password: string
 }) {
   const hashedPassword = await getPasswordHash(password)
-  const user = await db.user.create({
-    select: { id: true },
+  const session = await db.session.create({
+    select: { id: true, expirationDate: true },
     data: {
-      email: email.toLowerCase(),
-      username: username.toLowerCase(),
-      password: {
+      expirationDate: getSessionExpirationDate(),
+      user: {
         create: {
-          hash: hashedPassword,
+          email: email.toLowerCase(),
+          username: username.toLowerCase(),
+          password: {
+            create: {
+              hash: hashedPassword,
+            },
+          },
         },
       },
     },
   })
-  return user
+  return session
 }
 
 async function getPasswordHash(password: string) {
