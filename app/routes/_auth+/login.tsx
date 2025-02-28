@@ -12,12 +12,7 @@ import {
 import { safeRedirect } from 'remix-utils/safe-redirect'
 import { z } from 'zod'
 import { GeneralErrorBoundary } from '~/components/error-boundary'
-import {
-  AUTH_SESSION_KEY,
-  getSessionExpirationDate,
-  login,
-  requireAnonymous,
-} from '~/utils/auth.server'
+import { AUTH_SESSION_KEY, login, requireAnonymous } from '~/utils/auth.server'
 import { authSessionStorage } from '~/utils/session.server'
 import type { Route } from './+types/login'
 
@@ -40,37 +35,37 @@ export async function action({ request }: Route.ActionArgs) {
   const submission = await parseWithZod(formData, {
     schema: intent =>
       LoginFormSchema.transform(async (data, ctx) => {
-        if (intent !== null) return { ...data, user: null }
-        const user = await login(data)
-        if (!user) {
+        if (intent !== null) return { ...data, session: null }
+        const session = await login(data)
+        if (!session) {
           ctx.addIssue({
             code: 'custom',
             message: 'Invalid username or password',
           })
           return z.NEVER
         }
-        return { ...data, user }
+        return { ...data, session }
       }),
     async: true,
   })
 
-  if (submission.status !== 'success' || !submission.value.user) {
+  if (submission.status !== 'success' || !submission.value.session) {
     return data(
       { result: submission.reply({ hideFields: ['password'] }) },
       { status: submission.status === 'error' ? 400 : 200 },
     )
   }
 
-  const { user, remember, redirectTo } = submission.value
+  const { session, remember, redirectTo } = submission.value
 
   const authSession = await authSessionStorage.getSession(
     request.headers.get('cookie'),
   )
-  authSession.set(AUTH_SESSION_KEY, user.id)
+  authSession.set(AUTH_SESSION_KEY, session.id)
   return redirect(safeRedirect(redirectTo), {
     headers: {
       'set-cookie': await authSessionStorage.commitSession(authSession, {
-        expires: remember ? getSessionExpirationDate() : undefined,
+        expires: remember ? session.expirationDate : undefined,
       }),
     },
   })
