@@ -7,7 +7,9 @@ import {
   data,
   href,
   redirect,
+  useSearchParams,
 } from 'react-router'
+import { safeRedirect } from 'remix-utils/safe-redirect'
 import { z } from 'zod'
 import { GeneralErrorBoundary } from '~/components/error-boundary'
 import {
@@ -28,6 +30,7 @@ const LoginFormSchema = z.object({
       message: 'Password is too long',
     }),
   remember: z.boolean().default(false),
+  redirectTo: z.string().optional(),
 })
 
 export const meta: MetaFunction = () => [{ title: 'Login | Grape Stack' }]
@@ -58,13 +61,13 @@ export async function action({ request }: Route.ActionArgs) {
     )
   }
 
-  const { user, remember } = submission.value
+  const { user, remember, redirectTo } = submission.value
 
   const authSession = await authSessionStorage.getSession(
     request.headers.get('cookie'),
   )
   authSession.set(AUTH_SESSION_KEY, user.id)
-  return redirect('/', {
+  return redirect(safeRedirect(redirectTo), {
     headers: {
       'set-cookie': await authSessionStorage.commitSession(authSession, {
         expires: remember ? getSessionExpirationDate() : undefined,
@@ -79,11 +82,16 @@ export async function loader({ request }: Route.LoaderArgs) {
 }
 
 export default function LoginRoute({ actionData }: Route.ComponentProps) {
+  const [searchParams] = useSearchParams()
+  const redirectTo = searchParams.get('redirectTo')
   const [form, fields] = useForm({
     id: 'login-form',
     lastResult: actionData?.result,
     onValidate({ formData }) {
       return parseWithZod(formData, { schema: LoginFormSchema })
+    },
+    defaultValue: {
+      redirectTo,
     },
     shouldValidate: 'onBlur',
     shouldRevalidate: 'onInput',
@@ -97,6 +105,7 @@ export default function LoginRoute({ actionData }: Route.ComponentProps) {
           className="flex flex-col gap-4"
           {...getFormProps(form)}
         >
+          <input {...getInputProps(fields.redirectTo, { type: 'hidden' })} />
           <div className="flex flex-col gap-1">
             <label htmlFor={fields.username.id}>Username</label>
             <input

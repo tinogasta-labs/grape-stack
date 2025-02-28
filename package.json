@@ -33,6 +33,7 @@
     "react-dom": "19.0.0",
     "react-router": "7.2.0",
     "react-router-hono-server": "2.9.0",
+    "remix-utils": "8.1.0",
     "zod": "3.24.2"
   },
   "devDependencies": {
