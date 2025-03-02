@@ -39,3 +39,8 @@ export const PasswordAndConfirmPasswordSchema = z
 export const VerifyCodeSchema = z
   .string()
   .length(6, { message: 'The code must have 6 characters' })
+
+export const OptionalUrl = z.union([
+  z.string().url({ message: 'Please enter a valid URL' }).nullish(),
+  z.literal(''),
+])
