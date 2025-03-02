@@ -1,3 +1,6 @@
+import { type ClassValue, clsx } from 'clsx'
+import { twMerge } from 'tailwind-merge'
+
 export function getErrorMessage(error: unknown) {
   if (typeof error === 'string') return error
   if (
@@ -18,4 +21,8 @@ export function getDomainUrl(request: Request) {
     new URL(request.url).host
   const protocol = request.headers.get('X-Forwarded-Proto') ?? 'http'
   return `${protocol}://${host}`
+}
+
+export function cn(...inputs: ClassValue[]) {
+  return twMerge(clsx(inputs))
 }

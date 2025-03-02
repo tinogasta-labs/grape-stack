@@ -3,6 +3,8 @@ import { parseWithZod } from '@conform-to/zod'
 import { Form, type MetaFunction, useSearchParams } from 'react-router'
 import { z } from 'zod'
 import { GeneralErrorBoundary } from '~/components/error-boundary'
+import { ErrorList } from '~/components/forms'
+import { Button, Input } from '~/components/ui'
 import { VerifyCodeSchema } from '~/utils/validation'
 import type { Route } from './+types/verify'
 import { validateRequest } from './verify.server'
@@ -62,21 +64,18 @@ export default function VerfifyRoute({ actionData }: Route.ComponentProps) {
             {...getInputProps(fields[TARGET_QUERY_PARAM], { type: 'hidden' })}
           />
           <div className="flex flex-col gap-2">
-            <input
-              className="w-full rounded-lg border px-2 py-3"
+            <Input
               placeholder="Enter your code"
               maxLength={6}
               {...getInputProps(fields[CODE_QUERY_PARAM], { type: 'text' })}
             />
-            {JSON.stringify(fields[CODE_QUERY_PARAM].errors)}
+            <ErrorList
+              errors={fields[CODE_QUERY_PARAM].errors}
+              id={fields[CODE_QUERY_PARAM].errorId}
+            />
           </div>
-          {JSON.stringify(form.errors)}
-          <button
-            className="w-full cursor-pointer rounded-lg border bg-black py-3 text-white"
-            type="submit"
-          >
-            Confirm
-          </button>
+          <ErrorList errors={form.errors} id={form.errorId} />
+          <Button>Confirm</Button>
         </Form>
       </div>
     </div>

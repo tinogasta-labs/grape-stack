@@ -1,1 +1,18 @@
 @import 'tailwindcss';
+
+@theme {
+  --color-primary: #080813;
+  --color-on-primary: #f4f0ec;
+  --color-primary-variant: #0f0f1a;
+  --color-accent: #133366;
+  --color-on-accent: #ffffff;
+  --color-fg: #03060b;
+  --color-fg-muted: #424448;
+  --color-canvas: #fafafa;
+  --color-outline: #292929;
+  --color-error: #922a31;
+}
+
+body {
+  @apply text-fg bg-canvas;
+}

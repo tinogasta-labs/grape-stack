@@ -10,7 +10,9 @@ import {
 } from 'react-router'
 import { z } from 'zod'
 import { GeneralErrorBoundary } from '~/components/error-boundary'
+import { ErrorList } from '~/components/forms'
 import { SignupEmail } from '~/components/templates/signup-email'
+import { Button, Input } from '~/components/ui'
 import { requireAnonymous } from '~/utils/auth.server'
 import { db } from '~/utils/db.server'
 import { sendEmail } from '~/utils/email.server'
@@ -96,7 +98,7 @@ export default function SignupRoute({ actionData }: Route.ComponentProps) {
   return (
     <div className="p-4">
       <h1 className="text-lg font-medium">Register</h1>
-      <p>We need your email to continue.</p>
+      <p className="text-fg-muted">We need your email to continue.</p>
       <div className="mt-6 max-w-lg">
         <Form
           method="POST"
@@ -104,24 +106,20 @@ export default function SignupRoute({ actionData }: Route.ComponentProps) {
           {...getFormProps(form)}
         >
           <div className="flex flex-col gap-2">
-            <input
+            <Input
               className="w-full rounded-lg border px-2 py-3"
               placeholder="Enter your email"
               {...getInputProps(fields.email, { type: 'email' })}
             />
-            {JSON.stringify(fields.email.errors)}
+            <ErrorList errors={fields.email.errors} id={fields.email.errorId} />
           </div>
-          <button
-            className="w-full cursor-pointer rounded-lg border bg-black py-3 text-white"
-            type="submit"
-          >
-            Continue
-          </button>
+          <ErrorList errors={form.errors} id={form.errorId} />
+          <Button>Continue</Button>
         </Form>
-        <div className="py-4 text-sm">
+        <div className="text-fg-muted py-4 text-sm">
           <p>
             Already have an account?{' '}
-            <Link className="underline" to={href('/login')}>
+            <Link className="hover:text-fg underline" to={href('/login')}>
               Sign in
             </Link>
           </p>

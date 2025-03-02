@@ -9,7 +9,9 @@ import {
   redirect,
 } from 'react-router'
 import { z } from 'zod'
+import { ErrorList } from '~/components/forms'
 import { ForgotPasswordEmail } from '~/components/templates/forgot-email'
+import { Button, Input, Label } from '~/components/ui'
 import { requireAnonymous } from '~/utils/auth.server'
 import { db } from '~/utils/db.server'
 import { sendEmail } from '~/utils/email.server'
@@ -113,7 +115,9 @@ export default function ForgotPasswordRoute({
   return (
     <div className="p-4">
       <h1 className="text-lg font-medium">Forgot password</h1>
-      <p>No worries, well send your reset instructions.</p>
+      <p className="text-fg-muted">
+        No worries, well send your reset instructions.
+      </p>
       <div className="mt-6 max-w-lg">
         <Form
           method="POST"
@@ -121,26 +125,20 @@ export default function ForgotPasswordRoute({
           {...getFormProps(form)}
         >
           <div className="flex flex-col gap-1">
-            <label htmlFor={fields.email.id} className="sr-only">
+            <Label htmlFor={fields.email.id} className="sr-only">
               Email
-            </label>
-            <input
-              className="w-full rounded-lg border px-2 py-3"
+            </Label>
+            <Input
               placeholder="Enter your email"
               {...getInputProps(fields.email, { type: 'text' })}
             />
-            {JSON.stringify(fields.email.errors)}
+            <ErrorList errors={fields.email.errors} id={fields.email.errorId} />
           </div>
-          {JSON.stringify(form.errors)}
-          <button
-            className="w-full cursor-pointer rounded-lg border bg-black py-3 text-white"
-            type="submit"
-          >
-            Continue
-          </button>
+          <ErrorList errors={form.errors} id={form.errorId} />
+          <Button>Continue</Button>
         </Form>
-        <div className="mt-4">
-          <Link to={href('/login')} className="underline">
+        <div className="text-fg-muted mt-4">
+          <Link to={href('/login')} className="hover:text-fg underline">
             Back to login
           </Link>
         </div>
