@@ -8,6 +8,7 @@ import {
   href,
   redirect,
 } from 'react-router'
+import { HoneypotInputs } from 'remix-utils/honeypot/react'
 import { z } from 'zod'
 import { ErrorList } from '~/components/forms'
 import { ForgotPasswordEmail } from '~/components/templates/forgot-email'
@@ -15,6 +16,7 @@ import { Button, Input, Label } from '~/components/ui'
 import { requireAnonymous } from '~/utils/auth.server'
 import { db } from '~/utils/db.server'
 import { sendEmail } from '~/utils/email.server'
+import { checkHoneypot } from '~/utils/honeypot.server'
 import { UserEmailSchema } from '~/utils/validation'
 import type { Route } from './+types/forgot-password'
 import { prepareVerification } from './verify.server'
@@ -25,6 +27,7 @@ const ForgotPasswordFormSchema = z.object({
 
 export async function action({ request }: Route.ActionArgs) {
   const formData = await request.formData()
+  await checkHoneypot(formData)
   const submission = await parseWithZod(formData, {
     schema: intent =>
       ForgotPasswordFormSchema.superRefine(async (data, ctx) => {
@@ -124,6 +127,7 @@ export default function ForgotPasswordRoute({
           className="flex flex-col gap-2"
           {...getFormProps(form)}
         >
+          <HoneypotInputs />
           <div className="flex flex-col gap-1">
             <Label htmlFor={fields.email.id} className="sr-only">
               Email

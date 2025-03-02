@@ -1,12 +1,14 @@
 import { getFormProps, getInputProps, useForm } from '@conform-to/react'
 import { parseWithZod } from '@conform-to/zod'
 import { Form, data, redirect } from 'react-router'
+import { HoneypotInputs } from 'remix-utils/honeypot/react'
 import { z } from 'zod'
 import { GeneralErrorBoundary } from '~/components/error-boundary'
 import { ErrorList } from '~/components/forms'
 import { Button, Checkbox, Input, Label } from '~/components/ui'
 import { AUTH_SESSION_KEY, signup } from '~/utils/auth.server'
 import { db } from '~/utils/db.server'
+import { checkHoneypot } from '~/utils/honeypot.server'
 import { authSessionStorage } from '~/utils/session.server'
 import {
   PasswordAndConfirmPasswordSchema,
@@ -32,6 +34,7 @@ const SignupFormSchema = z
 export async function action({ request }: Route.ActionArgs) {
   const email = await requireOnboardingEmail(request)
   const formData = await request.formData()
+  await checkHoneypot(formData)
   const submission = await parseWithZod(formData, {
     schema: intent =>
       SignupFormSchema.superRefine(async (data, ctx) => {
@@ -112,6 +115,7 @@ export default function OnboardingRoute({
           className="flex flex-col gap-2"
           {...getFormProps(form)}
         >
+          <HoneypotInputs />
           <div className="flex flex-col gap-2">
             <Label htmlFor={fields.username.id}>Username</Label>
             <Input

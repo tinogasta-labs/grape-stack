@@ -9,12 +9,14 @@ import {
   redirect,
   useSearchParams,
 } from 'react-router'
+import { HoneypotInputs } from 'remix-utils/honeypot/react'
 import { safeRedirect } from 'remix-utils/safe-redirect'
 import { z } from 'zod'
 import { GeneralErrorBoundary } from '~/components/error-boundary'
 import { ErrorList } from '~/components/forms'
 import { Button, Checkbox, Input, Label } from '~/components/ui'
 import { AUTH_SESSION_KEY, login, requireAnonymous } from '~/utils/auth.server'
+import { checkHoneypot } from '~/utils/honeypot.server'
 import { authSessionStorage } from '~/utils/session.server'
 import type { Route } from './+types/login'
 
@@ -34,6 +36,7 @@ export const meta: MetaFunction = () => [{ title: 'Login | Grape Stack' }]
 
 export async function action({ request }: Route.ActionArgs) {
   const formData = await request.formData()
+  await checkHoneypot(formData)
   const submission = await parseWithZod(formData, {
     schema: intent =>
       LoginFormSchema.transform(async (data, ctx) => {
@@ -102,6 +105,7 @@ export default function LoginRoute({ actionData }: Route.ComponentProps) {
           className="flex flex-col gap-4"
           {...getFormProps(form)}
         >
+          <HoneypotInputs />
           <input {...getInputProps(fields.redirectTo, { type: 'hidden' })} />
           <div className="flex flex-col gap-1">
             <Label htmlFor={fields.username.id}>Username</Label>
