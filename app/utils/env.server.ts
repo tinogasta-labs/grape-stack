@@ -5,6 +5,7 @@ const envSchema = z.object({
   NODE_ENV: z.enum(['production', 'development', 'test'] as const),
   SESSION_SECRET: NonEmptyString,
   RESEND_API_KEY: NonEmptyString,
+  HONEYPOT_SECRET: NonEmptyString,
 })
 
 declare global {

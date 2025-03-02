@@ -1,10 +1,12 @@
 import { getFormProps, getInputProps, useForm } from '@conform-to/react'
 import { parseWithZod } from '@conform-to/zod'
 import { Form, type MetaFunction, useSearchParams } from 'react-router'
+import { HoneypotInputs } from 'remix-utils/honeypot/react'
 import { z } from 'zod'
 import { GeneralErrorBoundary } from '~/components/error-boundary'
 import { ErrorList } from '~/components/forms'
 import { Button, Input } from '~/components/ui'
+import { checkHoneypot } from '~/utils/honeypot.server'
 import { VerifyCodeSchema } from '~/utils/validation'
 import type { Route } from './+types/verify'
 import { validateRequest } from './verify.server'
@@ -26,6 +28,7 @@ export const VerifyFormSchema = z.object({
 
 export async function action({ request }: Route.ActionArgs) {
   const formData = await request.formData()
+  await checkHoneypot(formData)
   return validateRequest(request, formData)
 }
 
@@ -57,6 +60,7 @@ export default function VerfifyRoute({ actionData }: Route.ComponentProps) {
           {...getFormProps(form)}
           className="flex flex-col gap-2"
         >
+          <HoneypotInputs />
           <input
             {...getInputProps(fields[TYPE_QUERY_PARAM], { type: 'hidden' })}
           />

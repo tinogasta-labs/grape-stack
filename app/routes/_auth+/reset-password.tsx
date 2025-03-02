@@ -1,9 +1,11 @@
 import { getFormProps, getInputProps, useForm } from '@conform-to/react'
 import { parseWithZod } from '@conform-to/zod'
 import { Form, type MetaFunction, data, redirect } from 'react-router'
+import { HoneypotInputs } from 'remix-utils/honeypot/react'
 import { ErrorList } from '~/components/forms'
 import { Button, Input, Label } from '~/components/ui'
 import { resetUserPassword } from '~/utils/auth.server'
+import { checkHoneypot } from '~/utils/honeypot.server'
 import { PasswordAndConfirmPasswordSchema } from '~/utils/validation'
 import { verifySessionStorage } from '~/utils/verify.server'
 import type { Route } from './+types/reset-password'
@@ -16,6 +18,7 @@ const ResetPasswordFormSchema = PasswordAndConfirmPasswordSchema
 export async function action({ request }: Route.ActionArgs) {
   const resetPasswordUsername = await requireResetPasswordUsername(request)
   const formData = await request.formData()
+  await checkHoneypot(formData)
   const submission = parseWithZod(formData, { schema: ResetPasswordFormSchema })
 
   if (submission.status !== 'success') {
@@ -72,6 +75,7 @@ export default function ResetPasswordRoute({
           className="flex flex-col gap-4"
           {...getFormProps(form)}
         >
+          <HoneypotInputs />
           <div className="flex flex-col gap-1">
             <Label htmlFor={fields.password.id}>New password</Label>
             <Input

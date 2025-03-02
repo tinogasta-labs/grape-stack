@@ -8,6 +8,7 @@ import {
   href,
   redirect,
 } from 'react-router'
+import { HoneypotInputs } from 'remix-utils/honeypot/react'
 import { z } from 'zod'
 import { GeneralErrorBoundary } from '~/components/error-boundary'
 import { ErrorList } from '~/components/forms'
@@ -16,6 +17,7 @@ import { Button, Input } from '~/components/ui'
 import { requireAnonymous } from '~/utils/auth.server'
 import { db } from '~/utils/db.server'
 import { sendEmail } from '~/utils/email.server'
+import { checkHoneypot } from '~/utils/honeypot.server'
 import { UserEmailSchema } from '~/utils/validation'
 import type { Route } from './+types/signup'
 import { prepareVerification } from './verify.server'
@@ -26,6 +28,7 @@ const SignupFormSchema = z.object({
 
 export async function action({ request }: Route.ActionArgs) {
   const formData = await request.formData()
+  await checkHoneypot(formData)
   const submission = await parseWithZod(formData, {
     schema: SignupFormSchema.superRefine(async (data, ctx) => {
       const existUser = await db.user.findUnique({
@@ -105,6 +108,7 @@ export default function SignupRoute({ actionData }: Route.ComponentProps) {
           className="flex flex-col gap-2"
           {...getFormProps(form)}
         >
+          <HoneypotInputs />
           <div className="flex flex-col gap-2">
             <Input
               className="w-full rounded-lg border px-2 py-3"
