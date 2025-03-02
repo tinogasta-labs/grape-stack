@@ -3,6 +3,8 @@ import { parseWithZod } from '@conform-to/zod'
 import { Form, data, redirect } from 'react-router'
 import { z } from 'zod'
 import { GeneralErrorBoundary } from '~/components/error-boundary'
+import { ErrorList } from '~/components/forms'
+import { Button, Checkbox, Input, Label } from '~/components/ui'
 import { AUTH_SESSION_KEY, signup } from '~/utils/auth.server'
 import { db } from '~/utils/db.server'
 import { authSessionStorage } from '~/utils/session.server'
@@ -103,7 +105,7 @@ export default function OnboardingRoute({
   return (
     <div className="p-4">
       <h1 className="text-lg font-medium">Welcome {loaderData.email}</h1>
-      <p>Please enter your details.</p>
+      <p className="text-fg-muted">Please enter your details.</p>
       <div className="mt-6 max-w-lg">
         <Form
           method="POST"
@@ -111,64 +113,70 @@ export default function OnboardingRoute({
           {...getFormProps(form)}
         >
           <div className="flex flex-col gap-2">
-            <label htmlFor={fields.username.id}>Username</label>
-            <input
-              className="w-full rounded-lg border px-2 py-3"
+            <Label htmlFor={fields.username.id}>Username</Label>
+            <Input
               placeholder="Enter your username"
               {...getInputProps(fields.username, { type: 'text' })}
             />
-            {JSON.stringify(fields.username.errors)}
+            <ErrorList
+              errors={fields.username.errors}
+              id={fields.username.errorId}
+            />
           </div>
           <div className="flex flex-col gap-2">
-            <label htmlFor={fields.password.id}>Password</label>
-            <input
-              className="w-full rounded-lg border px-2 py-3"
+            <Label htmlFor={fields.password.id}>Password</Label>
+            <Input
               placeholder="Enter your password"
               {...getInputProps(fields.password, { type: 'password' })}
             />
-            {JSON.stringify(fields.password.errors)}
+            <ErrorList
+              errors={fields.password.errors}
+              id={fields.password.errorId}
+            />
           </div>
           <div className="flex flex-col gap-2">
-            <label htmlFor={fields.confirmPassword.id}>Confirm password</label>
-            <input
-              className="w-full rounded-lg border px-2 py-3"
+            <Label htmlFor={fields.confirmPassword.id}>Confirm password</Label>
+            <Input
               placeholder="Confirm your password"
               {...getInputProps(fields.confirmPassword, { type: 'password' })}
             />
-            {JSON.stringify(fields.confirmPassword.errors)}
+            <ErrorList
+              errors={fields.confirmPassword.errors}
+              id={fields.confirmPassword.errorId}
+            />
           </div>
           <div className="flex flex-col gap-2">
             <div className="flex items-center gap-2">
-              <input
+              <Checkbox
                 {...getInputProps(fields.agreeToTermsAndPrivacy, {
                   type: 'checkbox',
                 })}
               />
-              <label htmlFor={fields.agreeToTermsAndPrivacy.id}>
+              <Label htmlFor={fields.agreeToTermsAndPrivacy.id}>
                 Agree terms and privacy
-              </label>
+              </Label>
             </div>
-            {JSON.stringify(fields.agreeToTermsAndPrivacy.errors)}
+            <ErrorList
+              errors={fields.agreeToTermsAndPrivacy.errors}
+              id={fields.agreeToTermsAndPrivacy.errorId}
+            />
           </div>
           <div className="flex flex-col gap-2">
             <div className="flex items-center gap-2">
-              <input
+              <Checkbox
                 {...getInputProps(fields.remember, {
                   type: 'checkbox',
                 })}
               />
-              <label htmlFor={fields.agreeToTermsAndPrivacy.id}>
+              <Label htmlFor={fields.agreeToTermsAndPrivacy.id}>
                 Remember me
-              </label>
+              </Label>
             </div>
           </div>
 
-          <button
-            className="w-full cursor-pointer rounded-lg border bg-black py-3 text-white"
-            type="submit"
-          >
-            Submit
-          </button>
+          <ErrorList errors={form.errors} id={form.errorId} />
+
+          <Button type="submit">Submit</Button>
         </Form>
       </div>
     </div>

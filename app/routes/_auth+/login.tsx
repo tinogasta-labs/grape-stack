@@ -12,6 +12,8 @@ import {
 import { safeRedirect } from 'remix-utils/safe-redirect'
 import { z } from 'zod'
 import { GeneralErrorBoundary } from '~/components/error-boundary'
+import { ErrorList } from '~/components/forms'
+import { Button, Checkbox, Input, Label } from '~/components/ui'
 import { AUTH_SESSION_KEY, login, requireAnonymous } from '~/utils/auth.server'
 import { authSessionStorage } from '~/utils/session.server'
 import type { Route } from './+types/login'
@@ -102,46 +104,50 @@ export default function LoginRoute({ actionData }: Route.ComponentProps) {
         >
           <input {...getInputProps(fields.redirectTo, { type: 'hidden' })} />
           <div className="flex flex-col gap-1">
-            <label htmlFor={fields.username.id}>Username</label>
-            <input
+            <Label htmlFor={fields.username.id}>Username</Label>
+            <Input
               className="w-full rounded-lg border px-2 py-3"
               placeholder="Enter your username or email"
               {...getInputProps(fields.username, { type: 'text' })}
             />
-            {JSON.stringify(fields.username.errors, null, 2)}
+            <ErrorList
+              errors={fields.username.errors}
+              id={fields.username.errorId}
+            />
           </div>
           <div className="flex flex-col gap-1">
-            <label htmlFor={fields.password.id}>Password</label>
-            <input
+            <Label htmlFor={fields.password.id}>Password</Label>
+            <Input
               className="w-full rounded-lg border px-2 py-3"
               placeholder="Enter your password"
               {...getInputProps(fields.password, { type: 'password' })}
             />
-            {JSON.stringify(fields.password.errors, null, 2)}
+            <ErrorList
+              errors={fields.password.errors}
+              id={fields.password.errorId}
+            />
           </div>
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-1">
-              <input
+              <Checkbox
                 {...getInputProps(fields.remember, { type: 'checkbox' })}
               />
-              <label htmlFor={fields.remember.id}>Remember me</label>
+              <Label htmlFor={fields.remember.id}>Remember me</Label>
             </div>
-            <Link className="underline" to={href('/forgot-password')}>
+            <Link
+              className="text-fg-muted hover:text-fg text-sm underline"
+              to={href('/forgot-password')}
+            >
               Forgot password
             </Link>
           </div>
-          {JSON.stringify(form.errors, null, 2)}
-          <button
-            type="submit"
-            className="w-full cursor-pointer rounded-lg border bg-black py-3 text-white"
-          >
-            Login
-          </button>
+          <ErrorList errors={form.errors} id={form.errorId} />
+          <Button type="submit">Login</Button>
         </Form>
-        <div className="py-4 text-sm">
+        <div className="text-fg-muted py-4 text-sm">
           <p>
             Don't have an account?{' '}
-            <Link className="underline" to={href('/signup')}>
+            <Link className="hover:text-fg underline" to={href('/signup')}>
               Sign up
             </Link>
           </p>

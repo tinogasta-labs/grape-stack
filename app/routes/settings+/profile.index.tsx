@@ -1,5 +1,6 @@
 import { invariantResponse } from '@epic-web/invariant'
 import { useFetcher } from 'react-router'
+import { Button } from '~/components/ui'
 import { AUTH_SESSION_KEY, requireUserId } from '~/utils/auth.server'
 import { db } from '~/utils/db.server'
 import { authSessionStorage } from '~/utils/session.server'
@@ -52,15 +53,12 @@ export default function UserProfileRoute({ loaderData }: Route.ComponentProps) {
     <div className="p-4">
       {otherSessionsCount ? (
         <fetcher.Form method="POST">
-          <button
-            type="submit"
-            className="cursor-pointer rounded-lg bg-black px-4 py-3 text-white"
-          >
+          <Button type="submit" className="w-auto">
             Sign out of ${otherSessionsCount} other sessions
-          </button>
+          </Button>
         </fetcher.Form>
       ) : (
-        <p>This is your only session. </p>
+        <p className="text-fg-muted">This is your only session. </p>
       )}
     </div>
   )

@@ -1,6 +1,8 @@
 import { getFormProps, getInputProps, useForm } from '@conform-to/react'
 import { parseWithZod } from '@conform-to/zod'
 import { Form, type MetaFunction, data, redirect } from 'react-router'
+import { ErrorList } from '~/components/forms'
+import { Button, Input, Label } from '~/components/ui'
 import { resetUserPassword } from '~/utils/auth.server'
 import { PasswordAndConfirmPasswordSchema } from '~/utils/validation'
 import { verifySessionStorage } from '~/utils/verify.server'
@@ -61,7 +63,7 @@ export default function ResetPasswordRoute({
   return (
     <div className="p-4">
       <h1 className="text-lg font-medium">Reset password</h1>
-      <p className="text-body-md text-muted-foreground mt-3">
+      <p className="text-fg-muted mt-3">
         Hi, {loaderData.username}. No worries. It happens all the time.
       </p>
       <div className="mt-6 max-w-lg">
@@ -71,31 +73,30 @@ export default function ResetPasswordRoute({
           {...getFormProps(form)}
         >
           <div className="flex flex-col gap-1">
-            <label htmlFor={fields.password.id}>New password</label>
-            <input
-              className="w-full rounded-lg border px-2 py-3"
+            <Label htmlFor={fields.password.id}>New password</Label>
+            <Input
               placeholder="Enter your password"
               {...getInputProps(fields.password, { type: 'password' })}
             />
-            {JSON.stringify(fields.password.errors)}
+            <ErrorList
+              errors={fields.password.errors}
+              id={fields.password.errorId}
+            />
           </div>
           <div className="flex flex-col gap-1">
-            <label htmlFor={fields.confirmPassword.id}>Confirm password</label>
-            <input
-              className="w-full rounded-lg border px-2 py-3"
+            <Label htmlFor={fields.confirmPassword.id}>Confirm password</Label>
+            <Input
               placeholder="Confirm your password"
               {...getInputProps(fields.confirmPassword, { type: 'password' })}
             />
-            {JSON.stringify(fields.confirmPassword.errors)}
+            <ErrorList
+              errors={fields.confirmPassword.errors}
+              id={fields.confirmPassword.errorId}
+            />
           </div>
 
-          {JSON.stringify(form.errors)}
-          <button
-            className="w-full cursor-pointer rounded-lg border bg-black py-3 text-white"
-            type="submit"
-          >
-            Change password
-          </button>
+          <ErrorList errors={form.errors} id={form.errorId} />
+          <Button type="submit">Change password</Button>
         </Form>
       </div>
     </div>

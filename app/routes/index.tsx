@@ -1,4 +1,5 @@
 import { Form } from 'react-router'
+import { Button } from '~/components/ui'
 import { requireUserId } from '~/utils/auth.server'
 import type { Route } from './+types'
 
@@ -17,12 +18,13 @@ export async function loader({ request }: Route.LoaderArgs) {
 export default function Home() {
   return (
     <div className="p-4">
-      <h1>Welcome</h1>
+      <h1 className="text-xl">Welcome</h1>
+      <p className="text-fg-muted">This is a description</p>
       <div className="mt-6">
         <Form method="POST" action="/logout">
-          <button className="cursor-pointer underline" type="submit">
+          <Button type="submit" className="w-auto">
             Logout
-          </button>
+          </Button>
         </Form>
       </div>
     </div>
