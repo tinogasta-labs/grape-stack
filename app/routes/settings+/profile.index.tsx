@@ -1,5 +1,5 @@
 import { invariantResponse } from '@epic-web/invariant'
-import { useFetcher } from 'react-router'
+import { Link, href, useFetcher } from 'react-router'
 import { Button } from '~/components/ui'
 import { AUTH_SESSION_KEY, requireUserId } from '~/utils/auth.server'
 import { db } from '~/utils/db.server'
@@ -48,6 +48,12 @@ export async function action({ request }: Route.ActionArgs) {
 export default function UserProfileRoute({ loaderData }: Route.ComponentProps) {
   return (
     <div className="p-4">
+      <h1 className="text-xl font-bold">Settings</h1>
+      <div className="my-4">
+        <Link to={href('/settings/profile/password')} className="underline">
+          Change password
+        </Link>
+      </div>
       <SignOutSessions loaderData={loaderData} />
     </div>
   )
@@ -58,7 +64,7 @@ function SignOutSessions({ loaderData }: { loaderData: Info['loaderData'] }) {
   const fetcher = useFetcher()
   return (
     <div>
-      <h1 className="mb-4 text-xl">Active Sessions</h1>
+      <h1 className="mb-4 text-lg">Active Sessions</h1>
       {otherSessionsCount ? (
         <fetcher.Form method="POST">
           <Button
