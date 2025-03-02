@@ -46,7 +46,7 @@ export async function logout(request: Request) {
   })
 }
 
-async function verifyUserPassword(
+export async function verifyUserPassword(
   where: Pick<User, 'username'> | Pick<User, 'id'>,
   passwrod: string,
 ) {
@@ -143,7 +143,7 @@ export async function signup({
   return session
 }
 
-async function getPasswordHash(password: string) {
+export async function getPasswordHash(password: string) {
   return bcrypt.hash(password, 10)
 }
 
