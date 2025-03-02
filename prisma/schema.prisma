@@ -15,6 +15,7 @@ model User {
   username  String    @unique
   email     String    @unique
   password  Password?
+  profile   Profile?
   sessions  Session[]
   createdAt DateTime  @default(now())
   updatedAt DateTime  @updatedAt
@@ -58,4 +59,13 @@ model Session {
   userId         String
 
   @@index([userId])
+}
+
+model Profile {
+  id      String  @id @default(cuid())
+  name    String?
+  bio     String?
+  website String?
+  user    User    @relation(references: [id], fields: [userId], onDelete: Cascade, onUpdate: Cascade)
+  userId  String  @unique
 }
