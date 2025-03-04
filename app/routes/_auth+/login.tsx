@@ -17,6 +17,7 @@ import { ErrorList } from '~/components/forms'
 import { Button, Checkbox, Input, Label } from '~/components/ui'
 import { AUTH_SESSION_KEY, login, requireAnonymous } from '~/utils/auth.server'
 import { checkHoneypot } from '~/utils/honeypot.server'
+import { useIsPending } from '~/utils/misc'
 import { authSessionStorage } from '~/utils/session.server'
 import type { Route } from './+types/login'
 
@@ -82,6 +83,7 @@ export async function loader({ request }: Route.LoaderArgs) {
 }
 
 export default function LoginRoute({ actionData }: Route.ComponentProps) {
+  const isPending = useIsPending()
   const [searchParams] = useSearchParams()
   const redirectTo = searchParams.get('redirectTo')
   const [form, fields] = useForm({
@@ -146,7 +148,9 @@ export default function LoginRoute({ actionData }: Route.ComponentProps) {
             </Link>
           </div>
           <ErrorList errors={form.errors} id={form.errorId} />
-          <Button type="submit">Login</Button>
+          <Button disabled={isPending} type="submit">
+            Login
+          </Button>
         </Form>
         <div className="text-fg-muted py-4 text-sm">
           <p>

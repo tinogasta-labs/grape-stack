@@ -9,6 +9,7 @@ import { Button, Checkbox, Input, Label } from '~/components/ui'
 import { AUTH_SESSION_KEY, signup } from '~/utils/auth.server'
 import { db } from '~/utils/db.server'
 import { checkHoneypot } from '~/utils/honeypot.server'
+import { useIsPending } from '~/utils/misc'
 import { authSessionStorage } from '~/utils/session.server'
 import {
   PasswordAndConfirmPasswordSchema,
@@ -96,6 +97,7 @@ export default function OnboardingRoute({
   actionData,
   loaderData,
 }: Route.ComponentProps) {
+  const isPending = useIsPending()
   const [form, fields] = useForm({
     id: 'onboarding-form',
     lastResult: actionData?.result,
@@ -180,7 +182,9 @@ export default function OnboardingRoute({
 
           <ErrorList errors={form.errors} id={form.errorId} />
 
-          <Button type="submit">Submit</Button>
+          <Button type="submit" disabled={isPending}>
+            Submit
+          </Button>
         </Form>
       </div>
     </div>

@@ -5,7 +5,7 @@ const button = cva(
   [
     'w-full px-4 h-[58px] whitespace-nowrap text-sm ring-offset-canvas cursor-pointer rounded-lg text-on-primary uppercase outline-none',
     'focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-offset-canvas focus-visible:ring-primary',
-    'disabled:bg-primary-variant disabled:cursor-default',
+    'disabled:bg-primary-variant/50 disabled:cursor-default',
   ],
   {
     variants: {
