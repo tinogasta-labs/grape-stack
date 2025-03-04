@@ -1,6 +1,7 @@
 import { Form } from 'react-router'
 import { Button } from '~/components/ui'
 import { requireUserId } from '~/utils/auth.server'
+import { useIsPending } from '~/utils/misc'
 import type { Route } from './+types'
 
 export function meta() {
@@ -16,13 +17,14 @@ export async function loader({ request }: Route.LoaderArgs) {
 }
 
 export default function Home() {
+  const isPending = useIsPending({ formAction: '/logout' })
   return (
     <div className="p-4">
       <h1 className="text-xl">Welcome</h1>
       <p className="text-fg-muted">This is a description</p>
       <div className="mt-6">
         <Form method="POST" action="/logout">
-          <Button type="submit" className="w-auto">
+          <Button type="submit" className="w-auto" disabled={isPending}>
             Logout
           </Button>
         </Form>

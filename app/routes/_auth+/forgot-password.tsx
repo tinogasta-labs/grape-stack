@@ -17,6 +17,7 @@ import { requireAnonymous } from '~/utils/auth.server'
 import { db } from '~/utils/db.server'
 import { sendEmail } from '~/utils/email.server'
 import { checkHoneypot } from '~/utils/honeypot.server'
+import { useIsPending } from '~/utils/misc'
 import { UserEmailSchema } from '~/utils/validation'
 import type { Route } from './+types/forgot-password'
 import { prepareVerification } from './verify.server'
@@ -106,6 +107,7 @@ export const meta: MetaFunction = () => [
 export default function ForgotPasswordRoute({
   actionData,
 }: Route.ComponentProps) {
+  const isPending = useIsPending()
   const [form, fields] = useForm({
     id: 'forgot-password',
     lastResult: actionData?.result,
@@ -139,7 +141,9 @@ export default function ForgotPasswordRoute({
             <ErrorList errors={fields.email.errors} id={fields.email.errorId} />
           </div>
           <ErrorList errors={form.errors} id={form.errorId} />
-          <Button>Continue</Button>
+          <Button type="submit" disabled={isPending}>
+            Continue
+          </Button>
         </Form>
         <div className="text-fg-muted mt-4">
           <Link to={href('/login')} className="hover:text-fg underline">

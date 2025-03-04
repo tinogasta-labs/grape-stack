@@ -7,6 +7,7 @@ import { GeneralErrorBoundary } from '~/components/error-boundary'
 import { ErrorList } from '~/components/forms'
 import { Button, Input } from '~/components/ui'
 import { checkHoneypot } from '~/utils/honeypot.server'
+import { useIsPending } from '~/utils/misc'
 import { VerifyCodeSchema } from '~/utils/validation'
 import type { Route } from './+types/verify'
 import { validateRequest } from './verify.server'
@@ -35,6 +36,7 @@ export async function action({ request }: Route.ActionArgs) {
 export const meta: MetaFunction = () => [{ title: 'Verify | Grape Stack' }]
 
 export default function VerfifyRoute({ actionData }: Route.ComponentProps) {
+  const isPending = useIsPending()
   const [searchParams] = useSearchParams()
   const [form, fields] = useForm({
     id: 'verify-form',
@@ -79,7 +81,9 @@ export default function VerfifyRoute({ actionData }: Route.ComponentProps) {
             />
           </div>
           <ErrorList errors={form.errors} id={form.errorId} />
-          <Button>Confirm</Button>
+          <Button type="submit" disabled={isPending}>
+            Confirm
+          </Button>
         </Form>
       </div>
     </div>

@@ -6,6 +6,7 @@ import { ErrorList } from '~/components/forms'
 import { Button, Input, Label } from '~/components/ui'
 import { resetUserPassword } from '~/utils/auth.server'
 import { checkHoneypot } from '~/utils/honeypot.server'
+import { useIsPending } from '~/utils/misc'
 import { PasswordAndConfirmPasswordSchema } from '~/utils/validation'
 import { verifySessionStorage } from '~/utils/verify.server'
 import type { Route } from './+types/reset-password'
@@ -54,6 +55,7 @@ export default function ResetPasswordRoute({
   loaderData,
   actionData,
 }: Route.ComponentProps) {
+  const isPending = useIsPending()
   const [form, fields] = useForm({
     id: 'reset-password',
     lastResult: actionData?.result,
@@ -100,7 +102,9 @@ export default function ResetPasswordRoute({
           </div>
 
           <ErrorList errors={form.errors} id={form.errorId} />
-          <Button type="submit">Change password</Button>
+          <Button type="submit" disabled={isPending}>
+            Change password
+          </Button>
         </Form>
       </div>
     </div>

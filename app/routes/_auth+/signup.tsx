@@ -18,6 +18,7 @@ import { requireAnonymous } from '~/utils/auth.server'
 import { db } from '~/utils/db.server'
 import { sendEmail } from '~/utils/email.server'
 import { checkHoneypot } from '~/utils/honeypot.server'
+import { useIsPending } from '~/utils/misc'
 import { UserEmailSchema } from '~/utils/validation'
 import type { Route } from './+types/signup'
 import { prepareVerification } from './verify.server'
@@ -89,6 +90,7 @@ export async function loader({ request }: Route.LoaderArgs) {
 export const meta: MetaFunction = () => [{ title: 'Sign up | Grape Stack' }]
 
 export default function SignupRoute({ actionData }: Route.ComponentProps) {
+  const isPending = useIsPending()
   const [form, fields] = useForm({
     id: 'signup-form',
     lastResult: actionData?.result,
@@ -118,7 +120,9 @@ export default function SignupRoute({ actionData }: Route.ComponentProps) {
             <ErrorList errors={fields.email.errors} id={fields.email.errorId} />
           </div>
           <ErrorList errors={form.errors} id={form.errorId} />
-          <Button>Continue</Button>
+          <Button type="submit" disabled={isPending}>
+            Continue
+          </Button>
         </Form>
         <div className="text-fg-muted py-4 text-sm">
           <p>
