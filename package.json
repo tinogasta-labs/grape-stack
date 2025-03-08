@@ -14,7 +14,8 @@
     "lint:fix": "biome lint . --fix",
     "prepare": "lefthook install",
     "test:e2e": "playwright test",
-    "test:e2e:ui": "playwright test --ui"
+    "test:e2e:ui": "playwright test --ui",
+    "postinstall": "prisma migrate deploy && prisma generate"
   },
   "dependencies": {
     "@conform-to/react": "1.2.2",
@@ -78,6 +79,7 @@
     "onlyBuiltDependencies": [
       "@biomejs/biome",
       "@prisma/client",
+      "@prisma/engines",
       "esbuild",
       "lefthook",
       "msw",
